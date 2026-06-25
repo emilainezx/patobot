@@ -17,6 +17,10 @@ async function registerCommands() {
     new SlashCommandBuilder()
       .setName("meucargo")
       .setDescription("Veja há quantos dias você está na Patolândia e quando sobe de cargo!")
+      .toJSON(),
+    new SlashCommandBuilder()
+      .setName("testwelcome")
+      .setDescription("Testa a mensagem de boas-vindas!")
       .toJSON()
   ];
 
@@ -25,7 +29,7 @@ async function registerCommands() {
     Routes.applicationGuildCommands(client.user.id, process.env.GUILD_ID),
     { body: commands }
   );
-  console.log("✅ Comando /meucargo registrado!");
+  console.log("✅ Comandos registrados!");
 }
 
 client.once("clientReady", async () => {
@@ -75,39 +79,63 @@ client.on("guildMemberAdd", async (member) => {
   }
 });
 
-// Comando /meucargo
+// Comandos
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  if (interaction.commandName !== "meucargo") return;
 
-  const member = interaction.member;
-  const now = Date.now();
-  const daysInServer = Math.floor((now - member.joinedTimestamp) / (1000 * 60 * 60 * 24));
+  if (interaction.commandName === "testwelcome") {
+    const member = interaction.member;
+    const channel = interaction.channel;
 
-  const currentRole = ROLE_TABLE.find(r => daysInServer >= r.minDays);
-  const nextRole = ROLE_TABLE.slice().reverse().find(r => r.minDays > daysInServer);
+    await channel.send({
+      content: `${member}`,
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xFFD700)
+          .setAuthor({
+            name: member.user.username,
+            iconURL: member.user.displayAvatarURL(),
+          })
+          .setThumbnail(member.user.displayAvatarURL())
+          .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\nID do usuário: ${member.user.id}`)
+          .setTimestamp()
+      ]
+    });
 
-  const currentName = currentRole ? ROLE_NAMES[currentRole.roleId] : "Nenhum";
-  const daysLeft = nextRole ? nextRole.minDays - daysInServer : null;
-  const nextName = nextRole ? ROLE_NAMES[nextRole.roleId] : null;
-
-  const embed = new EmbedBuilder()
-    .setColor(0xFFD700)
-    .setTitle(`🦆 Evolução Patônica de ${member.user.username}`)
-    .addFields(
-      { name: "📅 Dias na Patolândia", value: `${daysInServer} dias`, inline: true },
-      { name: "🏅 Cargo atual", value: currentName, inline: true },
-    )
-    .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
-    .setTimestamp();
-
-  if (daysLeft && nextName) {
-    embed.addFields({ name: "⏳ Próximo cargo", value: `**${nextName}** em ${daysLeft} dia(s)!` });
-  } else {
-    embed.addFields({ name: "👑 Status", value: "Você atingiu o topo da hierarquia patônica!" });
+    await interaction.reply({ content: "✅ Mensagem de teste enviada!", ephemeral: true });
+    return;
   }
 
-  await interaction.reply({ embeds: [embed] });
+  if (interaction.commandName === "meucargo") {
+    const member = interaction.member;
+    const now = Date.now();
+    const daysInServer = Math.floor((now - member.joinedTimestamp) / (1000 * 60 * 60 * 24));
+
+    const currentRole = ROLE_TABLE.find(r => daysInServer >= r.minDays);
+    const nextRole = ROLE_TABLE.slice().reverse().find(r => r.minDays > daysInServer);
+
+    const currentName = currentRole ? ROLE_NAMES[currentRole.roleId] : "Nenhum";
+    const daysLeft = nextRole ? nextRole.minDays - daysInServer : null;
+    const nextName = nextRole ? ROLE_NAMES[nextRole.roleId] : null;
+
+    const embed = new EmbedBuilder()
+      .setColor(0xFFD700)
+      .setTitle(`🦆 Evolução Patônica de ${member.user.username}`)
+      .addFields(
+        { name: "📅 Dias na Patolândia", value: `${daysInServer} dias`, inline: true },
+        { name: "🏅 Cargo atual", value: currentName, inline: true },
+      )
+      .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+      .setTimestamp();
+
+    if (daysLeft && nextName) {
+      embed.addFields({ name: "⏳ Próximo cargo", value: `**${nextName}** em ${daysLeft} dia(s)!` });
+    } else {
+      embed.addFields({ name: "👑 Status", value: "Você atingiu o topo da hierarquia patônica!" });
+    }
+
+    await interaction.reply({ embeds: [embed] });
+  }
 });
 
 process.on("unhandledRejection", (error) => {
