@@ -129,7 +129,7 @@ client.on("interactionCreate", async (interaction) => {
     const embed = new EmbedBuilder()
       .setColor(0xFFD700)
       .setTitle("🦆 Comandos do PatoBot")
-      .setDescription("Aqui estão todos os comandos disponíveis na Patolândia!\nTem alguma sugestão? Manda no <#1406831841620791417>!")
+      .setDescription("Aqui estão todos os comandos disponíveis na Patolândia!\nTem alguma sugestão de comando? Manda no <#1406831841620791417>!")
       .addFields(
         { name: "/meucargo", value: "Veja há quantos dias você está na Patolândia e quando sobe de cargo!" },
         { name: "/cargo @membro", value: "Veja os dias e o cargo de outro membro!" },
