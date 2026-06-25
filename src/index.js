@@ -11,6 +11,7 @@ const client = new Client({
 });
 
 const WELCOME_CHANNEL_ID = "892199674193248286";
+const NETO_ID = "328677561301467136";
 
 async function registerCommands() {
   const commands = [
@@ -35,6 +36,10 @@ async function registerCommands() {
     new SlashCommandBuilder()
       .setName("comandos")
       .setDescription("Veja todos os comandos do PatoBot!")
+      .toJSON(),
+    new SlashCommandBuilder()
+      .setName("neto")
+      .setDescription("👀")
       .toJSON()
   ];
 
@@ -134,6 +139,11 @@ client.on("interactionCreate", async (interaction) => {
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
+    return;
+  }
+
+  if (interaction.commandName === "neto") {
+    await interaction.reply({ content: `<@${NETO_ID}> corno 🤣` });
     return;
   }
 
