@@ -4,7 +4,10 @@ const cron = require("node-cron");
 const { updateMemberRoles } = require("./roleScheduler");
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+  ],
 });
 
 client.once("clientReady", async () => {
@@ -12,7 +15,7 @@ client.once("clientReady", async () => {
 
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
   if (!guild) {
-    console.error("❌ Servidor não encontrado! Verifique o GUILD_ID no .env");
+    console.error("❌ Servidor não encontrado!");
     return;
   }
 
@@ -23,6 +26,10 @@ client.once("clientReady", async () => {
     console.log("⏰ Verificação diária iniciada...");
     await updateMemberRoles(guild);
   });
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error("Erro não tratado:", error);
 });
 
 client.login(process.env.BOT_TOKEN);
