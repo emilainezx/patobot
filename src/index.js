@@ -1,7 +1,7 @@
 require("dotenv").config();
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const cron = require("node-cron");
-const { updateMemberRoles } = require("./roleScheduler");
+const { updateMemberRoles, ROLE_TABLE, ROLE_NAMES } = require("./roleScheduler");
 
 const client = new Client({
   intents: [
@@ -9,6 +9,25 @@ const client = new Client({
     GatewayIntentBits.GuildMembers,
   ],
 });
+
+const WELCOME_CHANNEL_ID = "892199674193248286";
+
+// Registra o comando slash
+async function registerCommands() {
+  const commands = [
+    new SlashCommandBuilder()
+      .setName("meucargo")
+      .setDescription("Veja há quantos dias você está na Patolândia e quando sobe de cargo!")
+      .toJSON()
+  ];
+
+  const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
+  await rest.put(
+    Routes.applicationGuildCommands(client.user.id, process.env.GUILD_ID),
+    { body: commands }
+  );
+  console.log("✅ Comando /meucargo registrado!");
+}
 
 client.once("clientReady", async () => {
   console.log(`🦆 PatoBot online como ${client.user.tag}`);
@@ -19,6 +38,8 @@ client.once("clientReady", async () => {
     return;
   }
 
+  await registerCommands();
+
   console.log("🔍 Verificando cargos ao iniciar...");
   await updateMemberRoles(guild);
 
@@ -26,6 +47,64 @@ client.once("clientReady", async () => {
     console.log("⏰ Verificação diária iniciada...");
     await updateMemberRoles(guild);
   });
+});
+
+// Mensagem de boas-vindas
+client.on("guildMemberAdd", async (member) => {
+  const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
+  if (!channel) return;
+
+  const embed = new EmbedBuilder()
+    .setColor(0xFFD700)
+    .setTitle("🥚 Um novo pato saiu do ovo!")
+    .setDescription(`Bem-vindo à **Patolândia**, ${member}! \nVocê acaba de ganhar o cargo **Filhote de Pato**. Nade bastante e logo vai evoluir! 🦆`)
+    .setThumbnail(member.user.displayAvatarURL())
+    .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+    .setTimestamp();
+
+  await channel.send({ embeds: [embed] });
+
+  // Já atribui o cargo de Filhote de Pato
+  try {
+    await member.roles.add("892202757270929441");
+  } catch (err) {
+    console.error("Erro ao atribuir cargo de boas-vindas:", err);
+  }
+});
+
+// Comando /meucargo
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+  if (interaction.commandName !== "meucargo") return;
+
+  const member = interaction.member;
+  const now = Date.now();
+  const daysInServer = Math.floor((now - member.joinedTimestamp) / (1000 * 60 * 60 * 24));
+
+  const currentRole = ROLE_TABLE.find(r => daysInServer >= r.minDays);
+  const nextRole = ROLE_TABLE.slice().reverse().find(r => r.minDays > daysInServer);
+
+  const currentName = currentRole ? ROLE_NAMES[currentRole.roleId] : "Nenhum";
+  const daysLeft = nextRole ? nextRole.minDays - daysInServer : null;
+  const nextName = nextRole ? ROLE_NAMES[nextRole.roleId] : null;
+
+  const embed = new EmbedBuilder()
+    .setColor(0xFFD700)
+    .setTitle(`🦆 Evolução Patônica de ${member.user.username}`)
+    .addFields(
+      { name: "📅 Dias na Patolândia", value: `${daysInServer} dias`, inline: true },
+      { name: "🏅 Cargo atual", value: currentName, inline: true },
+    )
+    .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+    .setTimestamp();
+
+  if (daysLeft && nextName) {
+    embed.addFields({ name: "⏳ Próximo cargo", value: `**${nextName}** em ${daysLeft} dia(s)!` });
+  } else {
+    embed.addFields({ name: "👑 Status", value: "Você atingiu o topo da hierarquia patônica!" });
+  }
+
+  await interaction.reply({ embeds: [embed] });
 });
 
 process.on("unhandledRejection", (error) => {
