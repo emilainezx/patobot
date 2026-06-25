@@ -67,7 +67,7 @@ client.on("guildMemberAdd", async (member) => {
           iconURL: member.user.displayAvatarURL(),
         })
         .setThumbnail(member.user.displayAvatarURL())
-        .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\nID do usuário: ${member.user.id}`)
+        .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\n\`ID do usuário: ${member.user.id}\``)
         .setTimestamp()
     ]
   });
@@ -97,7 +97,7 @@ client.on("interactionCreate", async (interaction) => {
             iconURL: member.user.displayAvatarURL(),
           })
           .setThumbnail(member.user.displayAvatarURL())
-          .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\nID do usuário: ${member.user.id}`)
+          .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\n\`ID do usuário: ${member.user.id}\``)
           .setTimestamp()
       ]
     });
