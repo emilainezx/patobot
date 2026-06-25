@@ -12,7 +12,6 @@ const client = new Client({
 
 const WELCOME_CHANNEL_ID = "892199674193248286";
 
-// Registra o comando slash
 async function registerCommands() {
   const commands = [
     new SlashCommandBuilder()
@@ -54,17 +53,21 @@ client.on("guildMemberAdd", async (member) => {
   const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
   if (!channel) return;
 
-  const embed = new EmbedBuilder()
-    .setColor(0xFFD700)
-    .setTitle("🥚 Um novo pato saiu do ovo!")
-    .setDescription(`Bem-vindo à **Patolândia**, ${member}! \nVocê acaba de ganhar o cargo **Filhote de Pato**. Nade bastante e logo vai evoluir! 🦆`)
-    .setThumbnail(member.user.displayAvatarURL())
-    .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
-    .setTimestamp();
+  await channel.send({
+    content: `${member}`,
+    embeds: [
+      new EmbedBuilder()
+        .setColor(0xFFD700)
+        .setAuthor({
+          name: member.user.username,
+          iconURL: member.user.displayAvatarURL(),
+        })
+        .setThumbnail(member.user.displayAvatarURL())
+        .setDescription(`**Bem-vindo(a)!**\nOlá ${member}, espero que você se divirta na Patolândia!\nID do usuário: ${member.user.id}`)
+        .setTimestamp()
+    ]
+  });
 
-  await channel.send({ embeds: [embed] });
-
-  // Já atribui o cargo de Filhote de Pato
   try {
     await member.roles.add("892202757270929441");
   } catch (err) {
