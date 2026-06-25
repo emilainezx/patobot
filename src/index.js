@@ -143,7 +143,7 @@ client.on("interactionCreate", async (interaction) => {
   }
 
   if (interaction.commandName === "neto") {
-    await interaction.reply({ content: `<@${NETO_ID}> corno 🤣` });
+    await interaction.reply({ content: `<@${NETO_ID}> corno manso!` });
     return;
   }
 
