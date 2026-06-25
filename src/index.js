@@ -135,7 +135,7 @@ client.on("interactionCreate", async (interaction) => {
         { name: "/cargo @membro", value: "Veja os dias e o cargo de outro membro!" },
         { name: "/comandos", value: "Mostra essa lista de comandos!" },
       )
-      .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+      .setFooter({ text: "Patolândia • melhor servidor de todos os tempos" })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
@@ -166,7 +166,7 @@ client.on("interactionCreate", async (interaction) => {
         { name: "📅 Dias na Patolândia", value: `${daysInServer} dias`, inline: true },
         { name: "🏅 Cargo atual", value: currentName, inline: true },
       )
-      .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+      .setFooter({ text: "Patolândia • melhor servidor de todos os tempos" })
       .setTimestamp();
 
     if (daysLeft && nextName) {
@@ -199,7 +199,7 @@ client.on("interactionCreate", async (interaction) => {
         { name: "📅 Dias na Patolândia", value: `${daysInServer} dias`, inline: true },
         { name: "🏅 Cargo atual", value: currentName, inline: true },
       )
-      .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+      .setFooter({ text: "Patolândia • melhor servidor de todos os tempos" })
       .setTimestamp();
 
     if (daysLeft && nextName) {
