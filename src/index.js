@@ -31,6 +31,10 @@ async function registerCommands() {
           .setDescription("O membro que você quer consultar")
           .setRequired(true)
       )
+      .toJSON(),
+    new SlashCommandBuilder()
+      .setName("comandos")
+      .setDescription("Veja todos os comandos do PatoBot!")
       .toJSON()
   ];
 
@@ -113,6 +117,23 @@ client.on("interactionCreate", async (interaction) => {
     });
 
     await interaction.reply({ content: "✅ Mensagem de teste enviada!", ephemeral: true });
+    return;
+  }
+
+  if (interaction.commandName === "comandos") {
+    const embed = new EmbedBuilder()
+      .setColor(0xFFD700)
+      .setTitle("🦆 Comandos do PatoBot")
+      .setDescription("Aqui estão todos os comandos disponíveis na Patolândia!")
+      .addFields(
+        { name: "/meucargo", value: "Veja há quantos dias você está na Patolândia e quando sobe de cargo!" },
+        { name: "/cargo @membro", value: "Veja os dias e o cargo de outro membro!" },
+        { name: "/comandos", value: "Mostra essa lista de comandos!" },
+      )
+      .setFooter({ text: "Patolândia • Sistema de Evolução Patônica" })
+      .setTimestamp();
+
+    await interaction.reply({ embeds: [embed] });
     return;
   }
 
