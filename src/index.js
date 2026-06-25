@@ -135,7 +135,7 @@ client.on("interactionCreate", async (interaction) => {
         { name: "/cargo @membro", value: "Veja os dias e o cargo de outro membro!" },
         { name: "/comandos", value: "Mostra essa lista de comandos!" },
       )
-      .setFooter({ text: "Patolândia • melhor servidor de todos os tempos" })
+      .setFooter({ text: "Patolândia • Melhor servidor de todos os tempos" })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
