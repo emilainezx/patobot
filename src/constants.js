@@ -1,0 +1,15 @@
+module.exports = {
+  WELCOME_CHANNEL_ID: process.env.WELCOME_CHANNEL_ID,
+  ANIVERSARIO_CHANNEL_ID: process.env.ANIVERSARIO_CHANNEL_ID,
+  COMANDOS_CHANNEL_ID: process.env.COMANDOS_CHANNEL_ID,
+
+  MUTED_ROLE_ID: process.env.MUTED_ROLE_ID,
+
+  PRESIDENTE_ID: process.env.PRESIDENTE_ID,
+  MINISTRO_ID: process.env.MINISTRO_ID,
+  SENADOR_ID: process.env.SENADOR_ID,
+  DEPUTADO_ID: process.env.DEPUTADO_ID,
+
+
+  NETO_ID: process.env.NETO_ID,
+};
