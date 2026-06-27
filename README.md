@@ -23,6 +23,16 @@ O PatoBot foi criado para o servidor **Patolândia**, um servidor Discord temát
 - **Sistema de multas** — moderadores podem multar membros com remoção automática do cargo ao expirar
 - **Comandos slash** — interface moderna com `/meucargo`, `/cargo`, `/multar`, `/descultar`, `/multas`, `/aniversario` e mais
 
+## Screenshots
+
+<div align="center">
+  <img src="assets/meucargo.png" width="400"/>
+  <br/><br/>
+  <img src="assets/boasvindas.png" width="400"/>
+  <br/><br/>
+  <img src="assets/comandos.png" width="400"/>
+</div>
+
 ## Tecnologias
 
 - [Node.js](https://nodejs.org)
