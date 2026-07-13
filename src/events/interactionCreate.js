@@ -1,3 +1,4 @@
+const { LogAuditoria } = require("../database");
 const cooldowns = new Map();
 
 async function interactionCreate(interaction) {
@@ -34,6 +35,17 @@ async function interactionCreate(interaction) {
 
   try {
     await command.execute(interaction);
+
+    // Registra o log de auditoria
+    await LogAuditoria.create({
+      userId: interaction.user.id,
+      username: interaction.user.username,
+      comando: interaction.commandName,
+      detalhes: interaction.options?.data
+        ?.map(opt => `${opt.name}: ${opt.value}`)
+        .join(", ") || null,
+    });
+
   } catch (err) {
     console.error(`Erro no comando ${interaction.commandName}:`, err);
     if (interaction.replied || interaction.deferred) {

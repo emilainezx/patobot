@@ -58,10 +58,29 @@ const Multa = sequelize.define("Multa", {
   },
 });
 
+const LogAuditoria = sequelize.define("LogAuditoria", {
+  userId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  comando: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  detalhes: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+});
+
 async function conectarBanco() {
   await sequelize.authenticate();
   await sequelize.sync();
   console.log("✅ Banco de dados conectado!");
 }
 
-module.exports = { sequelize, Aniversario, Multa, conectarBanco };
+module.exports = { sequelize, Aniversario, Multa, LogAuditoria, conectarBanco };
