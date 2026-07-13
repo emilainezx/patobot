@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Multa } = require("../../../database");
 const { getTemposPermitidos } = require("../../../functions/getTemposPermitidos");
-const { MUTED_ROLE_ID, COMANDOS_CHANNEL_ID } = require("../../../constants");
+const { MUTED_ROLE_ID, COMANDOS_CHANNEL_ID, PRESIDENTE_ID, MINISTRO_ID, SENADOR_ID, DEPUTADO_ID } = require("../../../constants");
 
 const TEMPOS = {
   "1h": 60 * 60 * 1000,
@@ -9,6 +9,15 @@ const TEMPOS = {
   "7d": 7 * 24 * 60 * 60 * 1000,
   "30d": 30 * 24 * 60 * 60 * 1000,
 };
+
+const HIERARQUIA = [PRESIDENTE_ID, MINISTRO_ID, SENADOR_ID, DEPUTADO_ID];
+
+function getNivelHierarquia(member) {
+  for (let i = 0; i < HIERARQUIA.length; i++) {
+    if (member.roles.cache.has(HIERARQUIA[i])) return i;
+  }
+  return 999;
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -46,8 +55,15 @@ module.exports = {
     }
 
     const user = interaction.options.getUser("membro");
-    const motivo = interaction.options.getString("motivo");
     const member = await interaction.guild.members.fetch(user.id);
+
+    const nivelModerador = getNivelHierarquia(interaction.member);
+    const nivelAlvo = getNivelHierarquia(member);
+
+    if (nivelAlvo <= nivelModerador) {
+      await interaction.reply({ content: "❌ Você não pode multar alguém com cargo igual ou superior ao seu!", ephemeral: true });
+      return;
+    }
 
     if (member.roles.cache.has(MUTED_ROLE_ID)) {
       await interaction.reply({ content: `❌ ${user} já está multado!`, ephemeral: true });
@@ -59,7 +75,7 @@ module.exports = {
     await Multa.create({
       userId: user.id,
       username: user.username,
-      motivo,
+      motivo: interaction.options.getString("motivo"),
       aplicadoPor: interaction.user.username,
       expiraEm,
       ativa: true,
@@ -73,7 +89,7 @@ module.exports = {
         { name: "Membro", value: `${user}`, inline: true },
         { name: "Duração", value: tempo, inline: true },
         { name: "Aplicado por", value: interaction.member.toString(), inline: true },
-        { name: "Motivo", value: motivo },
+        { name: "Motivo", value: interaction.options.getString("motivo") },
         { name: "Expira em", value: expiraEm.toLocaleString("pt-BR") },
       )
       .setFooter({ text: "Patolândia • melhor servidor de todos os tempos" })

@@ -13,6 +13,7 @@ module.exports = {
       .addFields(
         { name: "/meucargo", value: "Veja há quantos dias você está na Patolândia e quando sobe de cargo!" },
         { name: "/cargo @membro", value: "Veja os dias e o cargo de outro membro!" },
+        { name: "/lagoa", value: "Veja as estatísticas da Patolândia!" },
         { name: "/meuaniversario DD/MM", value: "Cadastre seu aniversário!" },
         { name: "/aniversario @membro DD/MM", value: "Cadastre o aniversário de um membro!" },
         { name: "/multar @membro tempo motivo", value: "Aplica uma multa a um membro! (só moderação)" },
