@@ -1,11 +1,11 @@
 <div align="center">
   <h1>🦆 PatoBot</h1>
-  <p>Bot oficial da Patolândia </p>
+  <p>Bot oficial da Patolândia</p>
 
   ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
   ![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=flat&logo=discord&logoColor=white)
   ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
-  ![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat&logo=railway&logoColor=white)
+  ![Oracle Cloud](https://img.shields.io/badge/Oracle_Cloud-F80000?style=flat&logo=oracle&logoColor=white)
   ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)
 </div>
 
@@ -13,15 +13,17 @@
 
 ## Sobre
 
-O PatoBot foi criado para o servidor **Patolândia**, um servidor Discord temático de patos. Ele automatiza tarefas que antes eram feitas manualmente, como atualização de cargos por tempo de servidor, mensagens de boas-vindas e sistema de moderação.
+O PatoBot foi criado para o servidor **Patolândia**, um servidor Discord temático de patos. Ele automatiza tarefas que antes eram feitas manualmente, como atualização de cargos por tempo de servidor, mensagens de boas-vindas, sistema de moderação e parabenização de aniversariantes com mensagens geradas por IA.
+
+> ⚠️ Este bot foi desenvolvido para uso exclusivo da Patolândia. Para adaptar ao seu servidor, será necessário modificar as variáveis de ambiente, IDs de cargos e canais.
 
 ## Funcionalidades
 
-- **Evolução Patônica** — atualiza cargos automaticamente baseado no tempo que o membro está no servidor
-- **Boas-vindas** — manda mensagem personalizada quando alguém entra no servidor e atribui o cargo inicial
+- **Evolução Patônica** — atualiza cargos automaticamente baseado no tempo que o membro está no servidor, verificando diariamente
+- **Boas-vindas** — manda mensagem personalizada quando alguém entra no servidor e atribui o cargo inicial automaticamente
 - **Aniversários** — membros cadastram seu aniversário e o bot parabeniza com mensagem gerada por IA no dia
-- **Sistema de multas** — moderadores podem multar membros com remoção automática do cargo ao expirar
-- **Comandos slash** — interface moderna com `/meucargo`, `/cargo`, `/multar`, `/descultar`, `/multas`, `/aniversario` e mais
+- **Sistema de multas** — moderadores podem multar membros por tempo determinado, com hierarquia de permissões por cargo e remoção automática ao expirar
+- **Comandos slash** — interface moderna com `/meucargo`, `/cargo`, `/multar`, `/descultar`, `/multas`, `/meuaniversario`, `/aniversario` e `/comandos`
 
 ## Screenshots
 
@@ -39,8 +41,8 @@ O PatoBot foi criado para o servidor **Patolândia**, um servidor Discord temát
 - [Discord.js v14](https://discord.js.org)
 - [Sequelize](https://sequelize.org) + [PostgreSQL](https://www.postgresql.org)
 - [node-cron](https://github.com/node-cron/node-cron)
-- [Groq API](https://groq.com) 
-- [Railway](https://railway.app)
+- [Groq API](https://groq.com)
+- [Oracle Cloud](https://www.oracle.com/cloud/free/) — hospedagem gratuita
 
 ## Como rodar localmente
 
@@ -83,11 +85,13 @@ node src/index.js
 ```
 
 ## Estrutura do projeto
+
 ```
 src/
 ├── discord/commands/
 │   ├── moderacao/     # multar, descultar, multas
 │   ├── patolandia/    # cargo, meucargo, aniversario, meuaniversario, neto
+│   └── util/          # comandos
 ├── events/            # ready, guildMemberAdd, interactionCreate
 ├── functions/         # gerarMensagemAniversario, getTemposPermitidos
 ├── jobs/              # dailyJobs
