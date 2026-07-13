@@ -1,6 +1,7 @@
 const { Aniversario, Multa } = require("../database");
 const { updateMemberRoles, ROLE_TABLE, ROLE_NAMES } = require("../roleScheduler");
 const { gerarMensagemAniversario } = require("../functions/gerarMensagemAniversario");
+const { fazerBackup } = require("./backup");
 const { EmbedBuilder } = require("discord.js");
 const { ANIVERSARIO_CHANNEL_ID, MUTED_ROLE_ID } = require("../constants");
 
@@ -48,6 +49,8 @@ async function dailyJobs(guild) {
       await channel.send({ embeds: [embed] });
     }
   }
+
+  await fazerBackup().catch(err => console.error("Erro no backup:", err));
 }
 
 module.exports = { dailyJobs };
